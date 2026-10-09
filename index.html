@@ -192,6 +192,20 @@
     .node span { font: 12px "IBM Plex Mono", monospace; color: #91cbd1; }
     .node strong { margin-top: 5px; font-size: 15px; color: #fff; }
     .node small { display: block; margin-top: 7px; font: 10.5px "IBM Plex Mono", monospace; color: rgba(159,214,219,.72); letter-spacing: .01em; }
+    .node[role="button"] { cursor: pointer; }
+    .node[role="button"]:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+    .node-toggle { display: block; width: 9px; height: 9px; margin: 10px auto 0; border-right: 2px solid #91cbd1; border-bottom: 2px solid #91cbd1; transform: rotate(45deg); transition: transform .25s ease; }
+    .node.open .node-toggle { transform: rotate(225deg); }
+    .node.open { z-index: 5; }
+    .node-detail { display: none; }
+    .node.open .node-detail { display: block; position: absolute; z-index: 6; top: calc(100% + 10px); left: -10px; width: max(250px, 100%); background: #1d444d; border: 1px solid #3f6871; border-radius: 10px; padding: 14px 16px; box-shadow: 0 18px 44px rgba(0,0,0,.5); text-align: left; }
+    .node.ra .node-detail { left: auto; right: -10px; }
+    .node.flip .node-detail { top: auto; bottom: calc(100% + 10px); }
+    .node-detail p { margin: 0 0 10px; font-size: 12.5px; line-height: 1.6; color: #d4e9ec; }
+    .node-detail p:last-child { margin-bottom: 0; }
+    .node-covers { font-size: 11px; color: #91cbd1; }
+    .node-covers a { color: var(--signal); text-decoration: underline; text-underline-offset: 2px; }
+    .service { scroll-margin-top: 84px; }
     .n1 { left: 8%; top: 24%; }
     .n2 { right: 7%; top: 16%; }
     .n3 { left: 31%; top: 56%; min-width: 168px; border-color: var(--signal); }
@@ -337,6 +351,7 @@
       .node span { font-size: 10px; }
       .node strong { font-size: 13px; }
       .node small { font-size: 9px; }
+      .node.open .node-detail { position: static; width: auto; margin-top: 12px; box-shadow: none; }
       .map-label { left: 18px; top: 18px; }
       .status { top: 19px; right: 16px; }
       .proof { grid-template-columns: 1fr; }
@@ -382,7 +397,7 @@
         </div>
       </div>
 
-      <div class="system-map" aria-label="Illustration of connected data sources, pipelines, warehouse, and cloud operations">
+      <div class="system-map" aria-label="Interactive platform diagram: select a stage to see what it covers">
         <span class="map-label mono">Platform blueprint</span>
         <span class="status"><i></i> SYSTEM HEALTHY</span>
         <svg class="map-svg" viewBox="0 0 500 468" preserveAspectRatio="none" aria-hidden="true">
@@ -394,11 +409,21 @@
           <circle cx="308" cy="256" r="4" />
           <circle cx="394" cy="356" r="4" />
         </svg>
-        <div class="node n1"><span>01 / ingest</span><strong>Data sources</strong><small>APIs · files · streams · databases</small></div>
-        <div class="node n2"><span>02 / process</span><strong>Pipelines</strong><small>batch + streaming · ETL/ELT</small></div>
-        <div class="node n3"><span>03 / model</span><strong>Data warehouse</strong><small>modeled · governed · trusted</small></div>
-        <div class="node n4"><span>04 / serve</span><strong>Analytics</strong><small>dashboards · reports · BI</small></div>
-        <div class="node n5"><span>05 / assure</span><strong>Cloud operations</strong><small>monitoring · automation · patching</small></div>
+        <div class="node n1" tabindex="0" role="button" aria-expanded="false"><span>01 / ingest</span><strong>Data sources</strong><small>APIs · files · streams · databases</small><i class="node-toggle" aria-hidden="true"></i>
+          <div class="node-detail"><p>Connects your operational databases, SaaS apps, files, and event streams into a governed intake layer — with schema-drift handling, change-data capture, and validation at entry, so everything downstream starts from trusted raw material.</p><p class="node-covers">Covered by <a href="#svc-data-engineering">Data engineering</a> · <a href="#svc-cloud-platform">Cloud platform engineering</a></p></div>
+        </div>
+        <div class="node n2 ra" tabindex="0" role="button" aria-expanded="false"><span>02 / process</span><strong>Pipelines</strong><small>batch + streaming · ETL/ELT</small><i class="node-toggle" aria-hidden="true"></i>
+          <div class="node-detail"><p>Batch and streaming pipelines that cleanse, transform, and route data dependably — with idempotent reruns and built-in observability, so failures are caught before the business ever feels them.</p><p class="node-covers">Covered by <a href="#svc-data-engineering">Data engineering</a></p></div>
+        </div>
+        <div class="node n3 flip" tabindex="0" role="button" aria-expanded="false"><span>03 / model</span><strong>Data warehouse</strong><small>modeled · governed · trusted</small><i class="node-toggle" aria-hidden="true"></i>
+          <div class="node-detail"><p>Dimensional models and curated marts that turn raw data into consistent, governed business entities — performance-tuned and cost-aware, so analysts query with confidence.</p><p class="node-covers">Covered by <a href="#svc-data-warehousing">Data warehousing</a></p></div>
+        </div>
+        <div class="node n4 flip ra" tabindex="0" role="button" aria-expanded="false"><span>04 / serve</span><strong>Analytics</strong><small>dashboards · reports · BI</small><i class="node-toggle" aria-hidden="true"></i>
+          <div class="node-detail"><p>Dashboards, reports, and self-service BI served from one semantic layer — a single agreed definition for every metric, with access controls keeping sensitive data in the right hands.</p><p class="node-covers">Covered by <a href="#svc-data-warehousing">Data warehousing</a> · <a href="#svc-delivery">Delivery enablement</a></p></div>
+        </div>
+        <div class="node n5 flip" tabindex="0" role="button" aria-expanded="false"><span>05 / assure</span><strong>Cloud operations</strong><small>monitoring · automation · patching</small><i class="node-toggle" aria-hidden="true"></i>
+          <div class="node-detail"><p>Monitoring, alerting, patching, and automation across the whole platform — with upgrade planning, runbooks, and incident readiness keeping data systems available and supportable around the clock.</p><p class="node-covers">Covered by <a href="#svc-platform-ops">Platform operations</a> · <a href="#svc-cloud-platform">Cloud platform engineering</a></p></div>
+        </div>
       </div>
       </div>
 
@@ -423,43 +448,43 @@
       </div>
 
       <div class="services">
-        <article class="service">
+        <article class="service" id="svc-data-engineering">
           <span class="service-index">01</span>
           <h3>Data engineering</h3>
           <p>Dependable ingestion and transformation systems that make trusted data available when it is needed.</p>
           <ul><li>Batch and near-real-time pipelines</li><li>ETL and ELT modernization</li><li>Data quality and observability</li></ul>
         </article>
-        <article class="service">
+        <article class="service" id="svc-data-warehousing">
           <span class="service-index">02</span>
           <h3>Data warehousing</h3>
           <p>Well-modeled analytical platforms that turn fragmented information into consistent business insight.</p>
           <ul><li>Warehouse architecture</li><li>Dimensional data modeling</li><li>Performance and cost optimization</li></ul>
         </article>
-        <article class="service">
+        <article class="service" id="svc-cloud-platform">
           <span class="service-index">03</span>
           <h3>Cloud platform engineering</h3>
           <p>Secure, automated cloud foundations that give data teams a reliable place to build and operate.</p>
           <ul><li>Landing zones and networking</li><li>Infrastructure as code</li><li>Identity, secrets, and controls</li></ul>
         </article>
-        <article class="service">
+        <article class="service" id="svc-platform-ops">
           <span class="service-index">04</span>
           <h3>Platform operations</h3>
           <p>Operational rigor that keeps critical integration and data services available, visible, and supportable.</p>
           <ul><li>Monitoring and alerting</li><li>Upgrade and patch planning</li><li>Incident and runbook readiness</li></ul>
         </article>
-        <article class="service">
+        <article class="service" id="svc-modernization">
           <span class="service-index">05</span>
           <h3>Modernization strategy</h3>
           <p>A clear path from legacy estates to modern architectures, shaped around risk, value, and team capacity.</p>
           <ul><li>Current-state assessment</li><li>Target architecture</li><li>Phased migration roadmaps</li></ul>
         </article>
-        <article class="service">
+        <article class="service" id="svc-delivery">
           <span class="service-index">06</span>
           <h3>Delivery enablement</h3>
           <p>Repeatable engineering practices that help teams ship safer changes with less manual overhead.</p>
           <ul><li>CI/CD design</li><li>Environment automation</li><li>Knowledge transfer</li></ul>
         </article>
-        <article class="service">
+        <article class="service" id="svc-app-dev">
           <span class="service-index">07</span>
           <h3>App development</h3>
           <p>Complete delivery of mobile and web applications, from backend services to store-ready releases.</p>
@@ -588,6 +613,40 @@
           button.disabled = false;
           button.textContent = 'Send message';
         });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var cards = document.querySelectorAll('.node[role="button"]');
+      function closeAll() {
+        cards.forEach(function (c) {
+          c.classList.remove('open');
+          c.setAttribute('aria-expanded', 'false');
+        });
+      }
+      cards.forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('a')) return;
+          var willOpen = !card.classList.contains('open');
+          closeAll();
+          if (willOpen) {
+            card.classList.add('open');
+            card.setAttribute('aria-expanded', 'true');
+          }
+        });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          } else if (e.key === 'Escape') {
+            closeAll();
+            card.blur();
+          }
+        });
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.node')) closeAll();
       });
     })();
   </script>
